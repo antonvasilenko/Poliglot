@@ -1,0 +1,2 @@
+﻿<#@ include file="..\ResxToAndroidAccessorClass.template" #><# ProcessAccessors(Path.GetDirectoryName(Host.TemplateFile) + @"\..\Strings.en.resx", "RazorTranstator.Localization.Touch", Platform.Touch);
+#>

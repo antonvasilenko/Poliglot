@@ -1,0 +1,1 @@
+.\transform_tt.bat "d:\Work\subwork\git\Poliglot\sandbox\RazorTranstator" cs droid

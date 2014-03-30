@@ -1,0 +1,64 @@
+<#@ output extension=".xml" #>
+<#@ template language="C#" hostSpecific="true" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml.XPath" #>
+<#+
+
+private  const string KEY_PREFIX_GENERAL = "t_";
+        private const string KEY_PREFIX_DROID = "td_";
+        private const string KEY_PREFIX_TOUCH = "tt_";
+
+        public void Process(string resxRelativePath)
+        {
+            WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+            WriteLine("<resources>");
+
+            XDocument document;
+            try
+            {
+                document = XDocument.Load(resxRelativePath);
+            }
+            catch (FileNotFoundException)
+            {
+                WriteLine("<!-- File not found: " + resxRelativePath + " -->");
+                WriteLine("</resources>");
+                return;
+            }
+
+            IEnumerable<XElement> dataElements = document.XPathSelectElements("//root/data");
+
+            foreach (XElement element in dataElements)
+            {
+                string elementName = element.Attribute("name").Value;
+                string elementValue;
+
+                if (!elementName.StartsWith(KEY_PREFIX_GENERAL) && !elementName.StartsWith(KEY_PREFIX_DROID))
+                {
+                    continue;
+                }
+
+                XElement valueElement = element.Element("value");
+
+                if (valueElement != null)
+                {
+                    elementValue = valueElement.Value;
+                }
+                else
+                {
+                    continue;
+                }
+
+                string cleanedValue = elementValue.Replace("'", "\\'");
+
+                WriteLine(string.Format("    <string name=\"{0}\">{1}</string>", elementName, cleanedValue));
+            }
+
+            WriteLine("</resources>");
+        }
+#>

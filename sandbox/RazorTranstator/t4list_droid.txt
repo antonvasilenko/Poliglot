@@ -1,0 +1,2 @@
+d:\Work\subwork\git\Poliglot\sandbox\RazorTranstator\Resources\Values\Strings.tt
+d:\Work\subwork\git\Poliglot\sandbox\RazorTranstator\Localization\AppResources.droid.tt
