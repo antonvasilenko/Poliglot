@@ -93,6 +93,7 @@ namespace Poliglot
 
             var lines = File.ReadAllLines(path, Encoding.UTF8).ToList();
             var before = lines.Count;
+            var regex = new Regex(@"\s*""(\S+)""\s*=\s*""(\S+)""\s*;");
             foreach (var word in words.OrderBy(x => x))
             {
                 var left = "\"" + word + "\"";

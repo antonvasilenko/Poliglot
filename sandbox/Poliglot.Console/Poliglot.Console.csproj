@@ -7,8 +7,8 @@
     <ProjectGuid>{E08BA26F-BD04-4CDB-90F8-5BC4BDE0DCA5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RazorTranstator</RootNamespace>
-    <AssemblyName>RazorTranstator</AssemblyName>
+    <RootNamespace>Poliglot.Console</RootNamespace>
+    <AssemblyName>Poliglot.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -84,6 +84,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.tt</DependentUpon>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Poliglot.Translator\Poliglot.Transformer.csproj">
+      <Project>{1b5f50f5-a2fe-4832-9fa1-1b0c1f2b72fd}</Project>
+      <Name>Poliglot.Transformer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

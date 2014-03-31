@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RazorTranstator")]
+[assembly: AssemblyTitle("Poliglot.Transformer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("RazorTranstator")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
+[assembly: AssemblyCompany("antonv")]
+[assembly: AssemblyProduct("Transformer.Transformer")]
+[assembly: AssemblyCopyright("Copyright © antonv 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a2580907-d5e0-411f-8ab5-c5603d2cfa93")]
+[assembly: Guid("ab9f2e01-f131-4ead-b54b-6bb1dbc00866")]
 
 // Version information for an assembly consists of the following four values:
 //
