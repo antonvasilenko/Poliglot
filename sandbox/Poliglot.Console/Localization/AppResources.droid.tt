@@ -1,5 +1,0 @@
-﻿<#@ include file="..\ResxToAndroidAccessorClass.tt" #><# WriteLine(Environment.CurrentDirectory);
-Transform(
-	@"d:\Work\binary\src\trunk\Mobile\Touch\Swissphone.SOne.Mobile.Touch.Ui\Resources\en.lproj\Localizable.strings",
-	GenerationMode.CSharpAccessors);
-#>

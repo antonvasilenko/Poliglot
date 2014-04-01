@@ -11,12 +11,14 @@ namespace Poliglot
 {
     public enum Platform
     {
+        Undefined,
         Droid,
         Touch
     }
 
-    public enum GenerationMode
+    public enum GenerationType
     {
+        Undefined,
         DroidResources,
         TouchStrings,
         CSharpAccessors
@@ -27,6 +29,7 @@ namespace Poliglot
         private const string KEY_PREFIX_GENERAL = "t_";
         private const string KEY_PREFIX_DROID = "td_";
         private const string KEY_PREFIX_TOUCH = "tt_";
+        private string _commentTemplate;
 
         private class LocaleNode
         {
@@ -40,19 +43,36 @@ namespace Poliglot
         public Platform TargetPlatform { get; set; }
         public Action<string> WriteLine { get; set; }
 
-        public void Transform(string filePath, GenerationMode mode)
+        public void Transform(string filePath, GenerationType type)
         {
-            IntWriteLine(string.Format("// cur dir is: {0}", Environment.CurrentDirectory));
+            switch (type)
+            {
+                case GenerationType.CSharpAccessors:
+                    _commentTemplate = "//{0}";
+                    break;
+                case GenerationType.DroidResources:
+                    _commentTemplate = "<!--{0}-->";
+                    break;
+                case GenerationType.TouchStrings:
+                    _commentTemplate = "/*{0}*/";
+                    break;
+                default:
+                    _commentTemplate = "{0}";
+                    break;
+            }
+
             try
             {
                 var words = FetchPhrazes(filePath);
                 words = words.OrderBy(kvp => kvp.Key).ToDictionary(kp => kp.Key, kp => kp.Value);
-                Generate(words, mode);
+                Generate(words, type);
+
+                IntWriteCommentLine(string.Format("cur dir is: {0}", Environment.CurrentDirectory));
             }
             catch (Exception ex)
             {
-                IntWriteLine(string.Format("/* {0} */", ex.Message));
-                IntWriteLine(string.Format("/* {0} */", ex.StackTrace));
+                IntWriteCommentLine( ex.Message);
+                IntWriteCommentLine(ex.StackTrace);
             }
         }
 
@@ -142,17 +162,17 @@ namespace Poliglot
             return result;
         }
 
-        private void Generate(IDictionary<string, string> words, GenerationMode mode)
+        private void Generate(IDictionary<string, string> words, GenerationType type)
         {
-            switch (mode)
+            switch (type)
             {
-                case GenerationMode.CSharpAccessors:
+                case GenerationType.CSharpAccessors:
                     GenerateAccessors(words);
                     return;
-                case GenerationMode.DroidResources:
+                case GenerationType.DroidResources:
                     GenerateDroidResources(words);
                     return;
-                case GenerationMode.TouchStrings:
+                case GenerationType.TouchStrings:
                     GenerateTouchStrings(words);
                     return;
             }
@@ -185,7 +205,7 @@ namespace Poliglot
                     cleanedValue = string.Format("-{0}", kvp.Key);
                 }
 
-                IntWriteLine(string.Format("    <string name=\"{0}\">{1}</string>", cleanedValue, cleanedValue));
+                IntWriteLine(string.Format("    <string name=\"{0}\">{1}</string>", kvp.Key, cleanedValue));
             }
             IntWriteLine("</resources>");
         }
@@ -266,6 +286,10 @@ namespace Poliglot
                 root.Childs.Add(classAlias, classNode = new LocaleNode() { IsClass = true, Name = className });
             }
             var realKey = String.Join("", parts.Skip(2).Select(FirstLetterToUpper));
+            if (realKey == className)
+            {
+                realKey = realKey + "String";
+            }
             classNode.Childs[realKey] = new LocaleNode() { KeyValue = key, Name = realKey };
         }
 
@@ -283,6 +307,11 @@ namespace Poliglot
         private static string Indent(int level)
         {
             return new String(' ', level * 4);
+        }
+
+        public void IntWriteCommentLine(string line)
+        {
+            WriteLine(string.Format(_commentTemplate, line));
         }
 
         public void IntWriteLine(string line)

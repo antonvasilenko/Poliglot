@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E08BA26F-BD04-4CDB-90F8-5BC4BDE0DCA5}</ProjectGuid>
+    <ProjectGuid>{E1A5CBC5-0685-4ABF-893A-7ACA2F2A9E43}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Poliglot.Console</RootNamespace>
-    <AssemblyName>Poliglot.Console</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>TestProject.Droid</RootNamespace>
+    <AssemblyName>TestProject.Droid</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,26 +40,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Options.cs" />
+    <None Include="Localization\AppResources.droid.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.droid.tt</DependentUpon>
+    </None>
+    <Compile Include="Localization\AppResources.touch.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.touch.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Localization\ITranslator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="Localization\AppResources.droid.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AppResources.droid.cs</LastGenOutput>
+    </None>
+    <None Include="Localization\AppResources.touch.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AppResources.touch.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\Values\Strings.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Strings.xml</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Poliglot.Translator\Poliglot.Transformer.csproj">
-      <Project>{1b5f50f5-a2fe-4832-9fa1-1b0c1f2b72fd}</Project>
-      <Name>Poliglot.Transformer</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Strings.en.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Values\Strings.xml">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.tt</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>cd "d:\Work\subwork\git\Poliglot\sandbox\Poliglot.Console\bin\Debug\"
+cd
+Poliglot.Console.exe -s:"$(SolutionDir)\..\sandbox\Localizable.strings" -o:"$(ProjectDir)\Localization\AppResources.droid.cs" -t:accessors -n:TestProject.Localization -p:droid
+Poliglot.Console.exe -s:"$(SolutionDir)\..\sandbox\Localizable.strings" -o:"$(ProjectDir)\Localization\AppResources.touch.cs" -t:accessors -n:TestProject.Localization2 -p:touch
+Poliglot.Console.exe -s:"$(SolutionDir)\..\sandbox\Localizable.strings" -o:"$(ProjectDir)\Resources\Values\Strings.xml" -t:droid</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,0 +1,6 @@
+﻿<#@ output extension=".cs" #>
+<#@ include file="..\Poliglot.Transformer.tt" #><#
+Transform(
+	@"..\sandbox\Localizable.strings", // current directory here is a solution directory
+	GenerationType.CSharpAccessors, Platform.Droid);
+#>

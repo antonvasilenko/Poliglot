@@ -1,1 +1,0 @@
-﻿<#@ include file="..\..\Res2AndroidXml.tt" #><# Process(System.IO.Path.GetDirectoryName(Host.TemplateFile) + @"\..\..\Strings.en.resx");#>
