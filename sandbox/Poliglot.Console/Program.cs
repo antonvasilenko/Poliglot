@@ -8,6 +8,8 @@ namespace Poliglot
     internal class Program
     {
         private static string _namespace;
+        private static string _rootClass;
+        private static string _getterCode;
         private static string _source;
         private static string _out;
         private static GenerationType _type;
@@ -17,8 +19,11 @@ namespace Poliglot
 
         private static bool _showHelp;
 
+
         private static void Main(string[] args)
         {
+            Console.WriteLine();
+            Console.WriteLine("Poliglot.Transformer started.");
             var lOptionsParser = PrepareOptionsParser();
             ParseStartupOptions(lOptionsParser, args);
             var analyzeRes = AnalyzeStartupOptions();
@@ -27,7 +32,7 @@ namespace Poliglot
             {
                 Console.WriteLine();
                 Console.WriteLine(
-                    @"Usage: Poliglot.Trans -s:""c:\temp\input.resx"" -o:""d:\temp\out.cs"" -t:accessors -n:TestApp.Droid -p:droid");
+                    "Usage: Poliglot.Trans -s:\"c:\\temp\\input.resx\" -o:\"d:\\temp\\out.cs\" -t:accessors -n:TestApp.Droid -p:droid");
                 Console.WriteLine();
                 lOptionsParser.WriteOptionDescriptions(Console.Out);
                 return;
@@ -40,8 +45,11 @@ namespace Poliglot
                     {
                         Namespace = _namespace,
                         TargetPlatform = _platform,
-                        WriteLine = Console.WriteLine
+                        WriteLine = Console.WriteLine,
+                        RootClass = _rootClass
                     };
+                if (!string.IsNullOrEmpty(_getterCode))
+                    pr.GetterCode = _getterCode;
                 pr.Transform(_source, _type);
             }
             else
@@ -52,12 +60,16 @@ namespace Poliglot
                     {
                             Namespace = _namespace,
                             TargetPlatform = _platform,
-                            WriteLine = writer.WriteLine
+                            WriteLine = writer.WriteLine,
+                            RootClass = _rootClass
                         };
+                    if (!string.IsNullOrEmpty(_getterCode))
+                        pr.GetterCode = _getterCode;
                     pr.Transform(_source, _type);
                 }
-
             }
+            Console.WriteLine("Poliglot.Transformer has ended.");
+            Environment.Exit(0);
         }
 
         private static OptionSet PrepareOptionsParser()
@@ -68,6 +80,8 @@ namespace Poliglot
                     {"o|out=", "path to file to store generation output. If not defined, result will be printed in console", o => _out = o},
                     {"t|type=", "specifies type or generation result ('droid', 'touch', 'accessors' values are allowed)", t => _typeStr = t },
                     {"n|namespace=", "(for 'accessors' type) defines namespace for generated classes", pr => _namespace = pr},
+                    {"c|class=", "(for 'accessors' type) defines name of root static generated class", rc => _rootClass = rc},
+                    {"g|getter=", "(for 'accessors' type) overrides default body of getter",pr => _getterCode = pr},
                     {"p|platform=", "(for 'accessors' type) affects on what platform-specific keys to include or exclude", pl => _platformStr = pl},
                     {"h|?|help", "shows this help message and exit", h=> _showHelp = h != null}
                 };
@@ -80,6 +94,8 @@ namespace Poliglot
             _out = null;
             _namespace = "Your.Namespace.Here";
             _type = GenerationType.Undefined;
+            _rootClass = "T";
+            _getterCode = string.Empty;
             _platform = Platform.Undefined;
             _showHelp = false;
 
